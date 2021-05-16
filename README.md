@@ -1,5 +1,7 @@
 # Night of the Living GIF!
 
+Slides: https://docs.google.com/presentation/d/1mzLjPF4lHa33l90O_VVwg6Cz-Wslnu1kz11U-2EjqWw/edit?usp=sharing
+
 * Hit counter:
   * https://hitcounter.apsillers.repl.co/
   * https://replit.com/@apsillers/hitcounter
