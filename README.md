@@ -17,3 +17,7 @@
 * Multiplayer roguelike:
   * https://gaming.stackexchange.com/users/87199/apsillers?tab=profile 
   * https://replit.com/@apsillers/rogue-gif
+
+* Doom on AO3:
+  * https://archiveofourown.org/works/31295183
+  * https://github.com/apsillers/living-gif/blob/main/doomgif.js
