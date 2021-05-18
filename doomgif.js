@@ -7,8 +7,9 @@ const GIFEncoder = require("gifencoder");
 const { loadImage, createCanvas } = require('canvas');
 const app = express();
 const EventEmitter = require("events");
+EventEmitter.defaultMaxListeners = 0;
 
-var dims = [400, 250];
+var dims = [360, 225];
 
 const redrawEmitter = new EventEmitter();
 const canvas = createCanvas(dims[0], dims[1]);
@@ -35,7 +36,6 @@ app.get("/doom.gif", function(req, res) {
         encoder.addFrame(canvas.getContext("2d"));
     };
 
-
     doRedraw();
     redrawEmitter.on("redraw", doRedraw)
 
@@ -46,30 +46,41 @@ app.get("/doom.gif", function(req, res) {
     })
 });
 
-// take screenshots every .25 secs
+// take screenshots every 200ms
 setInterval(function() {
         // `P` must be configed as print-screen button in Doom
         cp.exec("xdotool key p;");
-}, 250)
+}, 200)
 
-// try pushing latest screenshot to all GIF streams
+// try pushing latest screenshot to all GIF streams every 100ms
 setInterval(function() {
     loadImage("/home/doom/DOOM00.png").then(function(image) {
+        // draw screenshot to canvas
         canvas.getContext("2d").drawImage(image, 0, 0, dims[0], dims[1]);
+        // tell all streams to redraw
         redrawEmitter.emit("redraw");
+        // make way for the next screenshot
         cp.exec("rm /home/doom/DOOM*.png;");
     }).catch(function(){});
 }, 100)
 
 // what keys can be passed to xdotools
-var keys = ["Up", "Down", "Left", "Right", "Escape", "space", "Ctrl", "Return",>
+var keys = ["Up", "Down", "Left", "Right", "Escape", "space", "Ctrl", "Return", "period", "comma"];
 // what keys are currenly being held down (for toggling state)
 var downKeys = [];
+// when this button is pressed, release these other keys
+var releaseKeys = { "Escape": ["Ctrl", "Up", "Down", "Left", "Right", "period", "comma", "space"], "period":["comma"], "comma":["period"], "Left":["Right"], "Right":["Left"] }
 
-
-app.get('/tap/:key', function(req, res) {
+// listen for `/tap/{key}` (nonce is always ignored)
+app.get('/tap/:key/:nonce?', function(req, res) {
     var key = req.params.key;
+    // only operate on approved keys
     if(keys.includes(key)) {
+        // release any keys that should be released before pressing this key
+        var keysToRelease = releaseKeys[key] || [];
+        keysToRelease.forEach(keyUp);
+
+        // tap the key
         cp.execSync("xdotool key " + key);
         console.log("pressed " + key);
         downKeys = downKeys.filter(k=> k != key);
@@ -77,15 +88,30 @@ app.get('/tap/:key', function(req, res) {
     res.redirect("https://archiveofourown.org/works/31295183#game");
 });
 
-app.get('/toggle/:key', function(req, res) {
+// release named key in X11 and remove it from our list of pressed keys
+function keyUp(key) {
+    console.log("releasing " + key);
+    cp.execSync("xdotool keyup " + key);
+    downKeys = downKeys.filter(k=> k != key);
+}
+
+// listen for `/tap/{key}` (nonce is always ignored)
+app.get('/toggle/:key/:nonce?', function(req, res) {
     var key = req.params.key;
+    // only operate on approved keys
     if(keys.includes(key)) {
         if(downKeys.includes(key)) {
-            cp.execSync("xdotool keyup " + key);
-            downKeys = downKeys.filter(k=> k != key);
+            // if the key is down, release it
+            keyUp(key);
         } else {
-            cp.execSync("xdotool keydown " + key);
+            // going to press the key...
+            // first release any keys that should be released before pressing this key
+            var keysToRelease = releaseKeys[key] || [];
+            keysToRelease.forEach(keyUp);
+            // push the key
             downKeys.push(key);
+            cp.execSync("xdotool keydown " + key);
+
         }
         console.log("toggled " + key);
     }
