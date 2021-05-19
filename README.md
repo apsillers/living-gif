@@ -20,4 +20,4 @@
 
 * Doom on AO3:
   * https://archiveofourown.org/works/31295183
-  * https://github.com/apsillers/living-gif/blob/main/doomgif.js
+  * https://github.com/apsillers/living-gif/tree/main/doomgif
