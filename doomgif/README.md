@@ -18,6 +18,8 @@ This is an HTTP server that controls and streams an instance of Doom running con
 
 ## Installation
 
+0. You probably need an operating system that strongly integrates X11, because this program strongly depends on `xdotool`. This probably limits you to GNU/Linux distros, but possibly MacOS could do it, too. I'm not sure.
+
 1. Install these packages (check with your local package manager for avilability):
 
     * [`chocolate-doom`](https://www.chocolate-doom.org/wiki/index.php/Chocolate_Doom) for a runnable clone of Doom
@@ -34,11 +36,11 @@ This is an HTTP server that controls and streams an instance of Doom running con
         key_menu_screenshot           25
         png_screenshots               1
 
-4. If you are running this on a server without X11, you need to install X11 (I used `startxfce`), and probably install a VNC server. I recommend `tigervnc`, because I found that `tightvnc` did not work correctly with `xdotool`.
+4. If you are running this on a server without X11, you need to install X11 (I used `startxfce4`), and probably install a VNC server. I recommend `tigervnc`, because I found that [`tightvnc` did not work correctly with `xdotool`](https://github.com/jordansissel/xdotool/issues/126).
 
 5. Optionally generate SSL keys (if using HTTPS) and point to them in the code. [`certbot`](https://certbot.eff.org/) is a free option for generating and signing keys.
 
-6. Install `npm install gifencoder`.
+6. Run `npm install gifencoder canvas`.
  
 7. Run `node doomgif.js` and `chocolate-doom -iwad [path to freedoom.wad]`. If you're running this in a non-graphical console, you will need to make sure to set the `DISPLAY=:1` environment variable for each so they share the same X display:
 
@@ -48,4 +50,4 @@ This is an HTTP server that controls and streams an instance of Doom running con
         # or if you run with sudo, pass through env with -E
         DISPLAY=:1 sudo -E node server.js
         
-8. By default, the server runs on port 8444 for HTTPS or 8080 for HTTP, so go to https://127.0.0.1:8444/doom.gif or http://127.0.0.1:8080/doom.gif. You can change the port, or unncommet the plain-HTTP `app.listen(8080)` to use HTTP.
+8. By default, the server runs on port 8444 for HTTPS or 8080 for HTTP, so go to https://127.0.0.1:8444/doom.gif or http://127.0.0.1:8080/doom.gif. You can change the port, or uncommeNt the plain-HTTP `app.listen(8080)` to use HTTP.
