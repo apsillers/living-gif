@@ -1,0 +1,26 @@
+{
+  "name": "doomgif",
+  "description": "An HTTP server for streaming and controlling the game Doom",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apsillers/living-gif.git"
+  },
+  "keywords": [
+    "Doom"
+  ],
+  "author": "Andrew Sillers <apsillers@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apsillers/living-gif/issues"
+  },
+  "homepage": "https://github.com/apsillers/living-gif",
+  "dependencies": {
+    "canvas": "^2.8.0",
+    "express": "^4.17.1",
+    "gifencoder": "^2.0.1"
+  }
+}
