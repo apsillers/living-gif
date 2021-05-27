@@ -31,7 +31,7 @@ This is an HTTP server that controls and streams an instance of Doom running con
     * to use `P` as the print-screen key, and
     * to capture screenshots as PNGs.
    
-    You can do this in `chocolate-setup` or by adding these lines to `~/.local/gmaes/chocolate-doom/chocolate-doom.cfg`:
+    You can do this in `chocolate-setup` or by adding these lines to `~/.local/games/chocolate-doom/chocolate-doom.cfg`:
 
         key_menu_screenshot           25
         png_screenshots               1
@@ -40,14 +40,15 @@ This is an HTTP server that controls and streams an instance of Doom running con
 
 5. Optionally generate SSL keys (if using HTTPS) and point to them in the code. [`certbot`](https://certbot.eff.org/) is a free option for generating and signing keys.
 
-6. Run `npm install gifencoder canvas`.
+6. Run `npm install` from within the doomgif directory in install the `gifencoder` and `canvas` NPM packages.
  
 7. Run `node doomgif.js` and `chocolate-doom -iwad [path to freedoom.wad]`. If you're running this in a non-graphical console, you will need to make sure to set the `DISPLAY=:1` environment variable for each so they share the same X display:
 
         DISPLAY=:1 chocolate-doom -iwad whatever/freedoom.wad
         
         DISPLAY=:1 node display.js
-        # or if you run with sudo, pass through env with -E
+        # or if you run with sudo, pass through env vars with -E
         DISPLAY=:1 sudo -E node server.js
         
-8. By default, the server runs on port 8444 for HTTPS or 8080 for HTTP, so go to https://127.0.0.1:8444/doom.gif or http://127.0.0.1:8080/doom.gif. You can change the port, or uncommeNt the plain-HTTP `app.listen(8080)` to use HTTP.
+8. By default, the server runs on port 8444 for HTTPS or 8080 for HTTP, so go to https://127.0.0.1:8444/doom.gif or http://127.0.0.1:8080/doom.gif. You can change the port, or uncomment the plain-HTTP `app.listen(8080)` to use HTTP.
+  * If you plan to embed your GIF in an HTTPS page, your image must be served over HTTPS.
